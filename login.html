@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URACCESSBOX Login and Signup</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 50px;
+    }
+    .auth-container {
+      max-width: 300px;
+      margin: 20px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+    }
+    .auth-container input,
+    .auth-container button {
+      width: 80%;
+      padding: 10px;
+      margin: 8px 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    .auth-container button {
+      background-color: #28a745;
+      color: white;
+    }
+    .auth-container button:hover {
+      background-color: #218838;
+    }
+    .auth-container .error {
+      color: red;
+      font-size: 1.1em;
+      margin-top: 10px;
+    }
+    .auth-container a {
+      color: #28a745;
+      text-decoration: none;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>URACCESSBOX</h1>
+
+  <!-- Auth container for Login and Signup -->
+  <div class="auth-container" id="authContainer">
+    <h2 id="authTitle">Login</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button id="submitBtn">Login</button>
+    <p class="error" id="authError"></p>
+    <p>Don't have an account? <a href="javascript:void(0)" id="toggleAuthLink">Sign up</a></p>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJFduMsk2YGyewXR79PTQhzaxMD_hhaGs",
+        authDomain: "logon-2f93b.firebaseapp.com",
+        projectId: "logon-2f93b",
+        storageBucket: "logon-2f93b.firebasestorage.app",
+        messagingSenderId: "828227665074",
+        appId: "1:828227665074:web:21e7eb8325e9cf3a06ddab",
+        measurementId: "G-E7T7FLM214"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Switch between Login and Signup forms
+    document.getElementById("toggleAuthLink").onclick = function() {
+      const authContainer = document.getElementById("authContainer");
+      const authTitle = document.getElementById("authTitle");
+      const submitBtn = document.getElementById("submitBtn");
+      const errorElement = document.getElementById("authError");
+
+      if (authTitle.innerHTML === "Login") {
+        authTitle.innerHTML = "Sign Up";
+        submitBtn.innerHTML = "Sign Up";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        errorElement.textContent = "";
+        document.getElementById("toggleAuthLink").textContent = "Already have an account? Login";
+      } else {
+        authTitle.innerHTML = "Login";
+        submitBtn.innerHTML = "Login";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        errorElement.textContent = "";
+        document.getElementById("toggleAuthLink").textContent = "Don't have an account? Sign up";
+      }
+    }
+
+    // Login function
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          window.location.href = "index.html"; // Redirect on successful login
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          document.getElementById("authError").textContent = "Error: " + errorMessage;
+        });
+    }
+
+    // Sign-up function
+    function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          window.location.href = "index.html"; // Redirect on successful signup
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          document.getElementById("authError").textContent = "Error: " + errorMessage;
+        });
+    }
+
+    // Handle form submit: Login or Signup based on the button label
+    document.getElementById("submitBtn").onclick = function() {
+      const actionTitle = document.getElementById("authTitle").innerHTML;
+      if (actionTitle === "Login") {
+        login(); // Call login function
+      } else {
+        signup(); // Call signup function
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - URACCESSBOX</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+      margin-bottom: 50px;
+    }
+    .signup-container {
+      max-width: 300px;
+      margin: 20px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+    }
+    .signup-container input,
+    .signup-container button {
+      width: 80%;
+      padding: 10px;
+      margin: 8px 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    .signup-container button {
+      background-color: #28a745;
+      color: white;
+    }
+    .signup-container button:hover {
+      background-color: #218838;
+    }
+    .signup-container .error {
+      color: red;
+      font-size: 1.1em;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>URACCESSBOX</h1>
+
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <input type="email" id="signupEmail" placeholder="Email" required>
+    <input type="password" id="signupPassword" placeholder="Password" required>
+    <button onclick="signup()">Sign Up</button>
+    <p class="error" id="signupError"></p>
+    <p>Already have an account? <a href="login.html" style="color: #ffcc00;">Login</a></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJFduMsk2YGyewXR79PTQhzaxMD_hhaGs",
+      authDomain: "logon-2f93b.firebaseapp.com",
+      projectId: "logon-2f93b",
+      storageBucket: "logon-2f93b.firebasestorage.app",
+      messagingSenderId: "828227665074",
+      appId: "1:828227665074:web:21e7eb8325e9cf3a06ddab",
+      measurementId: "G-E7T7FLM214"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    function signup() {
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          // Redirect to login page after successful sign-up
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          document.getElementById("signupError").textContent = "Failed to create an account. Try again.";
+        });
+    }
+  </script>
+
+</body>
+</html>
