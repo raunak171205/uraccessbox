@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - URACCESSBOX</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      padding: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+    .back-arrow:hover {
+      color: gray;
+    }
+    .back-arrow svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: fill 0.3s ease-in-out;
+    }
+    .back-arrow:hover svg {
+      fill: gray;
+    }
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .menu a {
+      text-decoration: none;
+      color: white;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid white;
+      border-radius: 5px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+      transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+    .menu a:hover {
+      background: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <!-- Back Arrow -->
+  <a href="javascript:history.back()" class="back-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M15 19l-7-7 7-7" />
+    </svg>
+    Back
+  </a>
+
+  <h1>Settings</h1>
+  <div class="menu">
+    <a href="index.html">Edit Profile</a>
+    <a href="index.html">Logout</a>
+    <a href="index.html">Switch User</a>  <!-- Switch User Link -->
+  </div>
+</body>
+</html>

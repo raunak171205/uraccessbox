@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - URACCESSBOX</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3em;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    #map {
+      height: 400px;
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      border-radius: 15px;
+      border: 2px solid white;
+    }
+    .devices-info {
+      margin: 30px auto;
+      width: 90%;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+    }
+    .device-status {
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      padding: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+    .back-arrow:hover {
+      color: gray;
+    }
+    .back-arrow svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: fill 0.3s ease-in-out;
+    }
+    .back-arrow:hover svg {
+      fill: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back Arrow -->
+  <a href="javascript:history.back()" class="back-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M15 19l-7-7 7-7"></path>
+    </svg>
+    Back
+  </a>
+
+  <h1>URACCESSBOX</h1>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Device Information -->
+  <div class="devices-info">
+    <div class="device-status">Total Devices: 3</div>
+    <div class="device-status">Device 1: Active</div>
+    <div class="device-status">Device 2: Inactive</div>
+    <div class="device-status">Device 3: Active</div>
+  </div>
+
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([51.505, -0.09], 13);  // Change coordinates to your location or dynamically
+
+    // Add a tile layer to the map (this is the background map)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Adding a marker for the device's online location (update latitude and longitude dynamically)
+    var marker = L.marker([51.505, -0.09]).addTo(map); // Placeholder coordinates
+    marker.bindPopup('<b>Device is Online!</b>').openPopup();
+  </script>
+
+</body>
+</html>

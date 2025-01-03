@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - URACCESSBOX</title>
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      padding: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+    .back-arrow:hover {
+      color: gray;
+    }
+    .back-arrow svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: fill 0.3s ease-in-out;
+    }
+    .back-arrow:hover svg {
+      fill: gray;
+    }
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    .form-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      font-size: 1.1em;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #218838;
+    }
+    .message {
+      color: white;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Back Arrow -->
+  <a href="javascript:history.back()" class="back-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M15 19l-7-7 7-7" />
+    </svg>
+    Back
+  </a>
+
+  <h1>Edit Profile</h1>
+
+  <div class="form-container">
+    <form id="editProfileForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+
+      <label for="newPass">New Password</label>
+      <input type="password" id="newPass" placeholder="Enter new password" />
+
+      <label for="confirmPass">Confirm Password</label>
+      <input type="password" id="confirmPass" placeholder="Confirm new password" />
+
+      <button type="submit">Update Profile</button>
+    </form>
+  </div>
+
+  <div id="statusMessage" class="message"></div>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_AUTH_DOMAIN',
+      projectId: 'YOUR_PROJECT_ID',
+      storageBucket: 'YOUR_STORAGE_BUCKET',
+      messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+      appId: 'YOUR_APP_ID'
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Edit Profile Form
+    const editProfileForm = document.getElementById('editProfileForm');
+    const statusMessage = document.getElementById('statusMessage');
+
+    editProfileForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const newPassword = document.getElementById('newPass').value;
+      const confirmPassword = document.getElementById('confirmPass').value;
+
+      const user = auth.currentUser;
+
+      // Validate inputs
+      if (newPassword && newPassword !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      // Show loading message
+      statusMessage.textContent = "Loading... Please wait.";
+
+      const updates = {};
+
+      if (name) {
+        updates.name = name;
+      }
+      if (email) {
+        updates.email = email;
+        // Update email in Firebase Authentication
+        user.updateEmail(email).catch((error) => {
+          alert(error.message);
+          statusMessage.textContent = '';
+        });
+      }
+      if (newPassword) {
+        // Update password in Firebase Authentication
+        user.updatePassword(newPassword).catch((error) => {
+          alert(error.message);
+          statusMessage.textContent = '';
+        });
+      }
+
+      // Update Firestore profile data
+      db.collection('users').doc(user.uid).update(updates).then(() => {
+        // Show profile updated message
+        statusMessage.textContent = "Profile Updated Successfully!";
+
+        // Go back to the previous page after a brief delay
+        setTimeout(() => {
+          window.history.back(); // Going back to the previous page
+        }, 2000); // Redirect after 2 seconds
+      }).catch((error) => {
+        // Show error message if update fails
+        statusMessage.textContent = "Error updating profile: " + error.message;
+      });
+    });
+  </script>
+</body>
+</html>
