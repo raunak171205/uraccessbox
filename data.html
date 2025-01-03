@@ -94,6 +94,113 @@
   <!-- View Data Button -->
   <a href="datastore.html" class="view-data-button">View Data</a>
 
-  <script src="app.js"></script>
+  <script>
+    // Chart.js Data Setup
+    const tempData = {
+      labels: [],  // Stores time or index
+      datasets: [{
+        label: "Temperature (°C)",
+        data: [],  // Stores temperature data points
+        borderColor: "rgba(255, 99, 132, 1)",
+        tension: 0.1,
+        fill: false
+      }]
+    };
+
+    const humidData = {
+      labels: [],  // Stores time or index
+      datasets: [{
+        label: "Humidity (%)",
+        data: [],  // Stores humidity data points
+        borderColor: "rgba(54, 162, 235, 1)",
+        tension: 0.1,
+        fill: false
+      }]
+    };
+
+    const tempConfig = {
+      type: 'line',
+      data: tempData,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Temperature (°C)'
+            },
+            min: 0,
+            max: 40
+          }
+        }
+      }
+    };
+
+    const humidConfig = {
+      type: 'line',
+      data: humidData,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Humidity (%)'
+            },
+            min: 0,
+            max: 100
+          }
+        }
+      }
+    };
+
+    const tempChart = new Chart(document.getElementById('tempChart'), tempConfig);
+    const humidChart = new Chart(document.getElementById('humidChart'), humidConfig);
+
+    // Example function to simulate fetching incoming data
+    function updateData(temp, humid) {
+      const timeNow = new Date().toLocaleTimeString();
+      if (tempData.labels.length >= 10) {
+        tempData.labels.shift();  // Remove oldest label
+        tempData.datasets[0].data.shift();  // Remove oldest temperature data point
+        humidData.labels.shift();  // Remove oldest label
+        humidData.datasets[0].data.shift();  // Remove oldest humidity data point
+      }
+
+      // Add new data
+      tempData.labels.push(timeNow);
+      tempData.datasets[0].data.push(temp);
+      humidData.labels.push(timeNow);
+      humidData.datasets[0].data.push(humid);
+
+      // Update the display
+      document.getElementById('temp').textContent = temp;
+      document.getElementById('humid').textContent = humid;
+
+      tempChart.update();
+      humidChart.update();
+    }
+
+    // Simulating incoming data for temperature and humidity every 2 seconds
+    setInterval(() => {
+      updateData(17.7, 69);  // Replace with actual data fetching code
+    }, 2000);
+  </script>
 </body>
 </html>
