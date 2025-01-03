@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LED Control</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3em;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    p {
+      text-align: center;
+      font-size: 1.2em;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      padding: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+    .back-arrow:hover {
+      color: gray;
+    }
+    .back-arrow svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      transition: fill 0.3s ease-in-out;
+    }
+    .back-arrow:hover svg {
+      fill: gray;
+    }
+    .view-data-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: white;
+      background-color: #28a745;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    .view-data-button:hover {
+      background-color: #218838;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .led-button {
+      padding: 15px 30px;
+      font-size: 1.5em;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+    .led-button-on {
+      background-color: #28a745;
+      color: white;
+    }
+    .led-button-off {
+      background-color: #dc3545;
+      color: white;
+    }
+    .led-button-blink {
+      background-color: #ffc107;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back Arrow -->
+  <a href="javascript:history.back()" class="back-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M15 19l-7-7 7-7"></path>
+    </svg>
+    Back
+  </a>
+
+  <h1>URACCESSBOX</h1>
+
+  <div class="container">
+    <h2>Manual Control</h2>
+    <div class="button-container">
+      <button id="ledOn" class="led-button led-button-on">LED ON</button><br>
+      <button id="ledOff" class="led-button led-button-off">LED OFF</button><br>
+      <button id="ledBlink" class="led-button led-button-blink">LED Blink</button>
+    </div>
+  </div>
+
+  <!-- View Data Button -->
+  <a href="datastore.html" class="view-data-button">View Data</a>
+
+  <script>
+    // Firebase configuration (use your own credentials here)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNP3LM1pJp1aTFtoMEqexSX88g_LnEkWA",
+        authDomain: "controller-ba59c.firebaseapp.com",
+        databaseURL: "https://controller-ba59c-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "controller-ba59c",
+        storageBucket: "controller-ba59c.firebasestorage.app",
+        messagingSenderId: "1054400795206",
+        appId: "1:1054400795206:web:ed0962fd93abd9ab74b047",
+        measurementId: "G-8XNR7VGC0Q"
+
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Handling LED button clicks and sending data to Firebase
+    document.getElementById("ledOn").addEventListener("click", function() {
+      sendInstructionToFirebase('ON');
+    });
+
+    document.getElementById("ledOff").addEventListener("click", function() {
+      sendInstructionToFirebase('OFF');
+    });
+
+    document.getElementById("ledBlink").addEventListener("click", function() {
+      sendInstructionToFirebase('BLINK');
+    });
+
+    function sendInstructionToFirebase(state) {
+      const ledRef = db.ref('ledControl');  // Reference to your LED control path in Firebase
+      ledRef.set({
+        state: state,
+        timestamp: Date.now() // Store time for history/logging if needed
+      });
+      console.log("Sent command:", state);
+    }
+  </script>
+
+</body>
+</html>
