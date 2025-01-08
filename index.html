@@ -156,7 +156,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           document.getElementById("loadingMessage").style.display = "none"; // Hide loading message
-          window.location.href = "welcome.html"; // Redirect on successful signup
+          window.location.href = "MQTT.PY"; // Redirect on successful signup
         })
         .catch((error) => {
           const errorCode = error.code;
